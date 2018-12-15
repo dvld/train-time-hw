@@ -6,7 +6,9 @@ var config = {
   apiKey: "AIzaSyBLytXuD57EnB7Un-h_IUG1BrwJWaDje44",
   authDomain: "traintimehw-57906.firebaseapp.com",
   databaseURL: "https://traintimehw-57906.firebaseio.com",
-  storageBucket: "traintimehw-57906.appspot.com"
+  projectId: "traintimehw-57906",
+  storageBucket: "traintimehw-57906.appspot.com",
+  messagingSenderId: "512870427460"
 };
 
 firebase.initializeApp(config);
@@ -44,10 +46,10 @@ $("#add-train-button").on("click", function() {
   $("#first-arrival-input").val("");
 
   // test console
-  console.log(newTrain.trainName);
-  console.log(newTrain.frequency);
-  console.log(newTrain.destination);
-  console.log(newTrain.firstArrival);
+  // console.log(newTrain.name);
+  // console.log(newTrain.frequency);
+  // console.log(newTrain.destination);
+  // console.log(newTrain.firstArrival);
 
   // prevent submit button from reloading page
   return false;
@@ -56,21 +58,23 @@ $("#add-train-button").on("click", function() {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-db.ref().on("child_added", function(childSnapshot, prevChildKey) {
+db.ref().on("child_added", function(childSnapshot) {
 
   console.log(childSnapshot.val());
 
   // store firebase data in variables
-  var fbName = childSnapshot.val().trainName;
+  var fbName = childSnapshot.val().name;
   var fbFrequency = childSnapshot.val().frequency;
   var fbArrival = childSnapshot.val().firstArrival;
   var fbDestination = childSnapshot.val().destination;
 
+  // console.log(fbArrival)
+
   var nextArrival;
   var minUntilArrival;
   var arrivalTime = fbArrival.split(":");
-  var maxMoment = moment.max(moment(), trainTime);
   var trainTime = moment().hours(arrivalTime[0]).minutes(arrivalTime[1]);
+  var maxMoment = moment.max(moment(), trainTime);
 
   if (maxMoment === trainTime) {
     nextArrival = trainTime.format("hh:mm A");
